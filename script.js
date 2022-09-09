@@ -1,11 +1,11 @@
 window.addEventListener('load', function(){
     let filmData;
-    let peopleData;
     mainElement =  document.querySelector('main');
     let navLinks = document.querySelectorAll('#mainnav ul li a');
     let dataSet = 'films';
     let url = `https://ghibliapi.herokuapp.com/films`
 
+    //getting the tab info
     navLinks.forEach(function (element){
         element.addEventListener('click', function(event){
             event.preventDefault();
@@ -16,6 +16,7 @@ window.addEventListener('load', function(){
         });
     });
 
+    //send request and receive data from endpoint using Fetch API
     async function getInfo(url){
         const dataPromise = await fetch(url);
         const data = await dataPromise.json();
@@ -37,12 +38,14 @@ window.addEventListener('load', function(){
 
     getInfo(url);
 
+    //sorting for 'Films' tab
     document.getElementById('sortorder').addEventListener('change', () => {
         document.querySelector('main').innerHTML = '';
         setSort(filmData);
         addCards(filmData);
     });
 
+    //sorting function
     function setSort(array){
         let sorted = document.getElementById('sortorder').value;
         switch (sorted) {
@@ -67,12 +70,14 @@ window.addEventListener('load', function(){
         }
     }
 
+    //adding cards to <main>
     function addCards(array){
         array.forEach((element) => {
             createCard(element);
         });
     }
 
+    //function to create cards of 5 types for different tabs
     async function createCard(data){
         const card = document.createElement('article');
         switch (dataSet) {
@@ -85,6 +90,7 @@ window.addEventListener('load', function(){
         mainElement.appendChild(card);
     }
 
+    //film card creation
     function filmCardContent(data){
         let html = `<h2>${data.title}</h2>`;
         html += `<p><strong>Director: </strong>${data.director}</p>`;
@@ -94,12 +100,14 @@ window.addEventListener('load', function(){
         return html;
     }
 
+    //getting array of data for some key
     async function individItem(url, item){
         const itemPromise = await fetch(url);
         const data = await itemPromise.json();
         return data[item];
     }
 
+    //people card creation
     async function peopleCardContent(data){
         const thefilms = data.films;
         let filmTitles = [];
@@ -115,6 +123,7 @@ window.addEventListener('load', function(){
         return html;
     }
 
+    //location card creation
     async function locationCardContent(data){
         const regex = 'https?:\/\/';
         const residents = data.residents;
@@ -152,6 +161,7 @@ window.addEventListener('load', function(){
         return html;
     }
 
+    //species card creation
     async function speciesCardContent(data){
         const thefilms = data.films;
         let filmTitles = [];
@@ -167,6 +177,7 @@ window.addEventListener('load', function(){
         return html;
     }
 
+    //vehicles card creation
     async function vehiclesCardContent(data){
         const thefilms = data.films;
         let filmTitles = [];
